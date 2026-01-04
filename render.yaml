@@ -5,7 +5,6 @@ services:
     env: docker
     plan: starter
     region: frankfurt
-    ipAllowList: []
 
   # Backend API
   - type: web
