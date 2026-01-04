@@ -1,0 +1,60 @@
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: lebensschule-db
+    env: docker
+    plan: starter
+    region: frankfurt
+    ipAllowList: []
+
+  # Backend API
+  - type: web
+    name: lebensschule-backend
+    runtime: docker
+    plan: starter
+    region: frankfurt
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: lebensschule-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_ACCESS_TOKEN_EXPIRES_MINUTES
+        value: 10080
+      - key: CORS_ORIGINS
+        fromService:
+          type: web
+          name: lebensschule-frontend
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: GROQ_API_KEY
+        sync: false  # You'll need to set this manually in Render dashboard
+      - key: GROQ_MODEL_NAME
+        value: gpt-oss-120b
+
+  # Frontend
+  - type: web
+    name: lebensschule-frontend
+    runtime: docker
+    plan: starter
+    region: frankfurt
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE_URL
+        fromService:
+          type: web
+          name: lebensschule-backend
+          envVarKey: RENDER_EXTERNAL_URL
+
+databases:
+  - name: lebensschule-db
+    databaseName: lebensschule
+    user: lebensschule
+    plan: starter
+    region: frankfurt
