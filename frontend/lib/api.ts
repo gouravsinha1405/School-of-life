@@ -1,4 +1,6 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+// In production on Render, NEXT_PUBLIC_* vars are not reliably available at image build time.
+// Default to same-origin so our Next.js `/api/*` proxy can forward to the backend at runtime.
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 export class APIError extends Error {
   status: number;

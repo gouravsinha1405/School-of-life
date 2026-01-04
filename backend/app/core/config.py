@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
 
     groq_api_key: str | None = None
-    groq_model_name: str = "gpt-oss-120b"
+    groq_model_name: str = "openai/gpt-oss-120b"
 
 
 settings = Settings()  # singleton

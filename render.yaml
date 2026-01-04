@@ -36,6 +36,11 @@ services:
     rootDir: frontend
     dockerfilePath: Dockerfile
     envVars:
+      - key: API_BASE_URL
+        fromService:
+          type: web
+          name: lebensschule-backend
+          envVarKey: RENDER_EXTERNAL_URL
       - key: NEXT_PUBLIC_API_BASE_URL
         fromService:
           type: web
