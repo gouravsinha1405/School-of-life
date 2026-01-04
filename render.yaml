@@ -55,5 +55,5 @@ databases:
   - name: lebensschule-db
     databaseName: lebensschule
     user: lebensschule
-    plan: starter
+    plan: free
     region: frankfurt
