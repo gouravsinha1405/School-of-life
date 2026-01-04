@@ -10,10 +10,27 @@ class Settings(BaseSettings):
 
     @property
     def sqlalchemy_database_url(self) -> str:
-        """Convert Render's postgres:// URL to postgresql+psycopg://"""
+        """Return a SQLAlchemy URL that uses psycopg v3.
+
+        Render commonly provides `postgres://...` or `postgresql://...` connection strings.
+        SQLAlchemy interprets plain `postgresql://...` as the psycopg2 driver by default,
+        so we normalize these to `postgresql+psycopg://...`.
+        """
+
         url = self.database_url
+
+        if url.startswith("postgresql+psycopg://"):
+            return url
+
         if url.startswith("postgres://"):
             return url.replace("postgres://", "postgresql+psycopg://", 1)
+
+        if url.startswith("postgresql://"):
+            return url.replace("postgresql://", "postgresql+psycopg://", 1)
+
+        if url.startswith("postgresql+psycopg2://"):
+            return url.replace("postgresql+psycopg2://", "postgresql+psycopg://", 1)
+
         return url
 
     jwt_secret: str = "change-me"
