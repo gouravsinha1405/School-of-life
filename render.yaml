@@ -2,11 +2,10 @@ services:
   # Backend API
   - type: web
     name: lebensschule-backend
-    runtime: docker
-    plan: starter
+    env: docker
     region: frankfurt
-    dockerfilePath: backend/Dockerfile
-    dockerContext: .
+    rootDir: backend
+    dockerfilePath: Dockerfile
     healthCheckPath: /
     envVars:
       - key: DATABASE_URL
@@ -32,11 +31,10 @@ services:
   # Frontend
   - type: web
     name: lebensschule-frontend
-    runtime: docker
-    plan: starter
+    env: docker
     region: frankfurt
-    dockerfilePath: frontend/Dockerfile
-    dockerContext: .
+    rootDir: frontend
+    dockerfilePath: Dockerfile
     envVars:
       - key: NEXT_PUBLIC_API_BASE_URL
         fromService:
